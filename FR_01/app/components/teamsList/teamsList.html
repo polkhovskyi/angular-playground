@@ -1,0 +1,18 @@
+﻿<form name="newTeamForm">
+    <div class="input-group">
+        <input name="newTeamInput" type="text" class="form-control" placeholder="Add new team..." ng-model="$ctrl.newTeam" required team-name-validator>
+        <span class="input-group-btn">
+            <button class="btn btn-secondary" type="button" ng-disabled="newTeamForm.newTeamInput.$invalid" ng-click="$ctrl.addTeam()">Add!</button>
+        </span>
+    </div>
+</form>
+
+<uib-accordion close-others="true">
+    <uib-accordion-group ng-repeat="team in $ctrl.teams">
+        <uib-accordion-heading>
+            <span ng-click="$ctrl.opened(team, $index)">{{team.title}}</span>
+        </uib-accordion-heading>
+
+        <div class="row" ng-repeat="member in team.members"><div style ="float: left; padding: 6px 12px;">{{member.name}}</div><button class="btn btn-link" type="button" ng-click="$ctrl.removeTeamMember(member)" style="float: right">remove</button><br/></div>
+    </uib-accordion-group>
+</uib-accordion>

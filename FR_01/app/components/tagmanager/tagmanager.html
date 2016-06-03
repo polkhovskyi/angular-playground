@@ -1,0 +1,15 @@
+﻿<div>
+    <div class="input-group">
+        <input type="text"
+               ng-model="$ctrl.selected"
+               uib-typeahead="employee as employee.name for employee in $ctrl.filterByName($ctrl.data, $viewValue) | limitTo: 10"
+               typeahead-on-select="$ctrl.onSelect($item, $model, $label)"
+               class="form-control">
+        <span class="input-group-btn">
+            <button class="btn btn-secondary" ng-disabled="$ctrl.pendingMembers.length == 0" type="button" ng-click="$ctrl.syncTeams()">Refresh</button>
+        </span>
+    </div>
+    <div class="container-fluid">
+        <div class="row" ng-repeat="member in $ctrl.pendingMembers"><div style="float: left; padding: 6px 12px;">{{member.name}}</div><button class="btn btn-link" type="button" ng-click="$ctrl.deleteMember(member)" style="float: right">remove</button><br /></div>
+    </div>
+</div>
