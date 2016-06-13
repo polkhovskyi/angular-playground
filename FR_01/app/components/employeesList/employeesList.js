@@ -4,7 +4,6 @@
         var ctrl = this;
         var myDataPromise = employeesService.getData();
         ctrl.selectedTeam = undefined;
-        ctrl.teamsSyncService = teamsSyncService;
         ctrl.gridOptions = {
             expandableRowScope: { scope: ctrl },
             enableRowHeaderSelection: false,
@@ -45,23 +44,13 @@
         };        
 
         ctrl.addTeamMember = function (teammember) {
-            if (!ctrl.teamsSyncService.selectedTeam.team.members) {
-                ctrl.teamsSyncService.selectedTeam.team.members = [];
+            if (!teamsSyncService.selectedTeam.team.members) {
+                teamsSyncService.selectedTeam.team.members = [];
             }
 
-            addTeamMember(teammember, ctrl.teamsSyncService.selectedTeam.team.members);
-            $rootScope.$broadcast("team.changed", "employeesListController");
-        }
-
-        function addTeamMember(teammember, source) {
-            var exist = source.filter(function (member) {
-                return member.id == teammember.id;
-            });
-
-            if (exist.length == 0) {
-                source.push(teammember);
-            }
-        }
+            teamsSyncService.addTeamMember(teammember, teamsSyncService.selectedTeam.team.members);
+            teamsSyncService.broadcastTeammembersChange();
+        }        
 
         $scope.$watch(function () { return teamsSyncService.selectedTeam; },
                function (value) {

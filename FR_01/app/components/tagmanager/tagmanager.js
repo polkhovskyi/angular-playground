@@ -4,10 +4,11 @@
         var ctrl = this;
         var _selected;
         var myDataPromise = employeesService.getData();
-        ctrl.teamsSyncService = teamsSyncService;       
+        ctrl.pendingMembers = [];
 
         ctrl.onSelect = function ($item, $model, $label) {
-            addTeamMember($item, ctrl.pendingMembers);
+            debugger;
+            teamsSyncService.addTeamMember($item, ctrl.pendingMembers);
             ctrl.selected = "";
         };
 
@@ -26,31 +27,17 @@
         };
 
         ctrl.syncTeams = function () {
-            ctrl.selectedTeam.team.members = [];
-            for (var i = 0; i < ctrl.pendingMembers.length; i++) {
-                addTeamMember(ctrl.pendingMembers[i], ctrl.selectedTeam.team.members);
-            }
+            teamsSyncService.sync(ctrl.pendingMembers);
         }
 
         myDataPromise.then(function (result) {
             ctrl.data = result;
         });
 
-        function addTeamMember(teammember, source) {
-
-            var exist = source.filter(function (member) {
-                return member.id == teammember.id;
-            });
-
-            if (exist.length == 0) {
-                source.push(teammember);
-            }
-        }
-
         $scope.$on("team.changed", function (event, value) {
             ctrl.pendingMembers = [];
             for (var i = 0; i < teamsSyncService.selectedTeam.team.members.length; i++) {
-                addTeamMember(teamsSyncService.selectedTeam.team.members[i], ctrl.pendingMembers);
+                teamsSyncService.addTeamMember(teamsSyncService.selectedTeam.team.members[i], ctrl.pendingMembers);
             }
         });
 
@@ -61,7 +48,7 @@
                    if (value.team.members) {
                        ctrl.pendingMembers = [];
                        for (var i = 0; i < value.team.members.length; i++) {
-                           addTeamMember(value.team.members[i], ctrl.pendingMembers);
+                           teamsSyncService.addTeamMember(value.team.members[i], ctrl.pendingMembers);
                        }
                    } else {
                        ctrl.pendingMembers = [];
