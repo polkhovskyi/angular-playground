@@ -23,6 +23,7 @@
 
     angular.module('app').component('teamsList', {
         templateUrl: 'app/components/teamsList/teamsList.html',
+        
         controller: teamsListController,
         bindings: {
             title: '='
